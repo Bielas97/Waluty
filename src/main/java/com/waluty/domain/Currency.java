@@ -1,8 +1,8 @@
-package com.waluty.waluty.domain;
+package com.waluty.domain;
 
-import lombok.Data;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
+import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.Entity;
@@ -17,7 +17,6 @@ import javax.persistence.Id;
 public class Currency {
     @GeneratedValue
     @Id
-
     private Long id;
     private Double mid; // średni kurs waluty
     private String effectiveDate; //data publikacji

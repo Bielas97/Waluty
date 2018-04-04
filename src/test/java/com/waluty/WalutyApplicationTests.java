@@ -1,4 +1,4 @@
-package com.waluty.waluty;
+package com.waluty;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;

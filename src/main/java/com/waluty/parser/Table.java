@@ -1,9 +1,9 @@
-package com.waluty.waluty.parser;
+package com.waluty.parser;
 
-import com.waluty.waluty.Currency;
+import com.waluty.domain.Currency;
+import lombok.Data;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
-import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 
 import java.io.BufferedReader;
@@ -14,6 +14,7 @@ import java.net.URLConnection;
 import java.util.ArrayList;
 import java.util.List;
 
+@Data
 public class Table {
     static final private String NBP = "http://api.nbp.pl/api/exchangerates/tables/A/";
 
@@ -26,7 +27,7 @@ public class Table {
             java.net.URL url = new URL(NBP);
             URLConnection connection = url.openConnection();
             BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(connection.getInputStream()));
-            JSONParser jsonParser = new JSONParser();
+            org.json.simple.parser.JSONParser jsonParser = new org.json.simple.parser.JSONParser();
             String napis = "";
             listCourrency = new ArrayList<>();
             while ((napis = bufferedReader.readLine()) != null) {
@@ -40,7 +41,15 @@ public class Table {
                         }
                         for (Object obiect2 : table) {
                             JSONObject job = (JSONObject) obiect2;
-                            //ustawiamy pola skladowe Currency
+                            Currency currency = new Currency();
+
+                            currency.setCode((String) job.get("code"));
+                            currency.setMid((Double) job.get("mid"));
+                            currency.setCurrency((String) job.get("currency"));
+                            //nie jestem pewien moze byc do poprawy ale idzie do mastera
+                            currency.setTable((String) job.get("table"));
+                            currency.setNo((Double) job.get("no"));
+                            //koniec fragmentu ktorego nie jestem pewien
                             listCourrency.add(currency);
                         }
                     }
