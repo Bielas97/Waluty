@@ -7,17 +7,18 @@ import lombok.NoArgsConstructor;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
 
 @Entity
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-
 public class Currency {
     @GeneratedValue
+    @Id
 
-
+    private Long id;
     private Double mid; // średni kurs waluty
     private String effectiveDate; //data publikacji
     private String currency;
