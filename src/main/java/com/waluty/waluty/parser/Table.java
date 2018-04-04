@@ -1,9 +1,10 @@
 package com.waluty.Parser;
 
-import com.fasterxml.jackson.core.JsonParser;
 import com.waluty.waluty.Currency;
-import jdk.nashorn.internal.parser.JSONParser;
-import org.json.simple.*;
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
+import org.json.simple.parser.ParseException;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -12,12 +13,11 @@ import java.net.URL;
 import java.net.URLConnection;
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.time.ZoneId;
-
 
 
 public class Table {
@@ -31,7 +31,7 @@ public class Table {
             java.net.URL url = new URL(NBP);
             URLConnection connection = url.openConnection();
             BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(connection.getInputStream()));
-            JSONParser Parser = new JsonParser();
+            JSONParser jsonParser = new JSONParser();
             String napis = "";
             while ((napis = bufferedReader.readLine()) != null) {
                 try {
