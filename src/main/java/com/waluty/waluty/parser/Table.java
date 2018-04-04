@@ -1,4 +1,4 @@
-package com.waluty.Parser;
+package com.waluty.waluty.parser;
 
 import com.waluty.waluty.Currency;
 import org.json.simple.JSONArray;
@@ -15,13 +15,15 @@ import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
 import java.util.Date;
+import java.util.ArrayList;
 import java.util.List;
 
 
+
+//LOMBOk
 public class Table {
-    private String NBP = "http://api.nbp.pl/api/exchangerates/tables/A/" +;
+    private String NBP;
 
     private String datePublication;
 
@@ -32,7 +34,7 @@ public class Table {
             URLConnection connection = url.openConnection();
             BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(connection.getInputStream()));
             JSONParser jsonParser = new JSONParser();
-            String napis = "";
+            String napis;
             while ((napis = bufferedReader.readLine()) != null) {
                 try {
                     JSONArray tab = (JSONArray) jsonParser.parse(napis);
@@ -45,7 +47,7 @@ public class Table {
                         for (Object obiect2 : table) {
                             JSONObject job = (JSONObject) obiect2;
                             Currency currency = new Currency((String) job.get("code"), (String) job.get("currency"), (double) job.get("mid"));
-                            List<Currency> list = new ArrayList<Currency>();
+                            List<Currency> list = new ArrayList<>();
                             list.add(currency);
                         }
                     }
@@ -60,12 +62,14 @@ public class Table {
 
     public Table() {
         LocalTime time = LocalTime.now();
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy MM dd");
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
         this.NBP = "http://api.nbp.pl/api/exchangerates/tables/A/" + time.format(formatter);
+        this.setTable();
     }
 
     public Table(Date date) {
         LocalDate data = date.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
         this.NBP = "http://api.nbp.pl/api/exchangerates/tables/A/" + data.getYear() + " " + data.getMonthValue() + " " + data.getDayOfMonth();
+        this.setTable();
     }
 }
