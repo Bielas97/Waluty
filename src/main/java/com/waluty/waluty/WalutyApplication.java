@@ -3,7 +3,6 @@ package com.waluty.waluty;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
-//Branch mateusza
 @SpringBootApplication
 public class WalutyApplication {
 
