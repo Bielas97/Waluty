@@ -1,22 +1,15 @@
-package com.waluty.domain;
+package com.waluty.model.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-
-@Entity
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class Currency {
-    @GeneratedValue
-    @Id
+public class CurrencyDto {
     private Long id;
     private Double mid; // średni kurs waluty
     private String effectiveDate; //data publikacji
@@ -24,5 +17,4 @@ public class Currency {
     private String code;
     private String table; //Interesują nas tabele A i B
     private Double no; //numer tabeli
-
 }

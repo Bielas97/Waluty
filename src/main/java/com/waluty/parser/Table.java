@@ -1,6 +1,6 @@
 package com.waluty.parser;
 
-import com.waluty.domain.Currency;
+import com.waluty.model.dto.CurrencyDto;
 import lombok.Data;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
@@ -20,7 +20,7 @@ public class Table {
 
     private String datePublication;
 
-    private List<Currency> listCourrency;
+    private List<CurrencyDto> listCurrency;
 
     private void setTable() {
         try {
@@ -29,28 +29,32 @@ public class Table {
             BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(connection.getInputStream()));
             org.json.simple.parser.JSONParser jsonParser = new org.json.simple.parser.JSONParser();
             String napis = "";
-            listCourrency = new ArrayList<>();
+            listCurrency = new ArrayList<>();
             while ((napis = bufferedReader.readLine()) != null) {
                 try {
                     JSONArray tab = (JSONArray) jsonParser.parse(napis);
                     for (Object obiect : tab) {
                         JSONObject jO = (JSONObject) obiect;
+                        //System.out.println("XXXXXXXXXXXXXXXXX________________--------------------");
+                        // System.out.println(jO.toString());
+
                         JSONArray table = (JSONArray) jO.get("rates");
                         if (datePublication == null) {
                             datePublication = (String) jO.get("effectiveDate");
                         }
                         for (Object obiect2 : table) {
                             JSONObject job = (JSONObject) obiect2;
-                            Currency currency = new Currency();
+                            CurrencyDto currency = new CurrencyDto();
 
                             currency.setCode((String) job.get("code"));
                             currency.setMid((Double) job.get("mid"));
                             currency.setCurrency((String) job.get("currency"));
-                            //nie jestem pewien moze byc do poprawy ale idzie do mastera
+                            //niepotrzene!!!!
+                       /*     //nie jestem pewien moze byc do poprawy ale idzie do mastera
                             currency.setTable((String) job.get("table"));
                             currency.setNo((Double) job.get("no"));
-                            //koniec fragmentu ktorego nie jestem pewien
-                            listCourrency.add(currency);
+                            //koniec fragmentu ktorego nie jestem pewien*/
+                            listCurrency.add(currency);
                         }
                     }
                 } catch (ParseException e) {
@@ -62,7 +66,12 @@ public class Table {
         }
     }
 
+    //metoda dodajaca kazda pozycje z listCurrency do bazy danych
+    //by metoda poprawnie zapisywala do bazy trzeba skorzystac z metody fromCurrencyDtoToCurrency!!!!!
+    //aby tego dokonac ConverterDto musi byc wstrzyknietym beanem!!!!
+
     public Table() {
         this.setTable();
+        //wywolanie metody dodajaca kazda pozycje z listCurrency do bazy danych
     }
 }
