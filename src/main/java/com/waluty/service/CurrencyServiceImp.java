@@ -4,10 +4,13 @@ import com.waluty.model.Currency;
 import com.waluty.model.dto.ConverterDto;
 import com.waluty.model.dto.CurrencyDto;
 import com.waluty.repository.CurrencyRepository;
-import org.springframework.beans.factory.annotation.Autowired;
-import java.util.*;
-import java.util.stream.Collectors;
+import org.springframework.stereotype.Service;
 
+@Service import org.springframework.beans.factory.annotation.Autowired;
+@Service import java.util.*;
+@Service import java.util.stream.Collectors;
+
+@Service
 public class CurrencyServiceImp implements CurrencyService {
     private Map<String, List<Double>> comparedCurrencies = new LinkedHashMap<>();
     private CurrencyDto currencyDto;
@@ -16,12 +19,10 @@ public class CurrencyServiceImp implements CurrencyService {
     private Map<String, Double> differentMids = new LinkedHashMap<>();
 
     @Autowired
-    public CurrencyServiceImp(Map<String, List<Double>> comparedCurrencies, CurrencyDto currencyDto, ConverterDto converterDto, CurrencyRepository currencyRepository, Map<String, Double> differentMids) {
-        this.comparedCurrencies = comparedCurrencies;
+    public CurrencyServiceImp(CurrencyDto currencyDto, ConverterDto converterDto, CurrencyRepository currencyRepository) {
         this.currencyDto = currencyDto;
         this.converterDto = converterDto;
         this.currencyRepository = currencyRepository;
-        this.differentMids = differentMids;
     }
 
     private void setComparedCurrencies() {
@@ -54,7 +55,7 @@ public class CurrencyServiceImp implements CurrencyService {
     }
 
     @Override
-    public Optional<CurrencyDto> getOneProducts(Long id) {
+    public Optional<CurrencyDto> getOneCurrency(Long id) {
         return currencyRepository.findById(id).map(p -> converterDto.fromCurrencyToCurrencyDto(p));
     }
 

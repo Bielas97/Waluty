@@ -7,7 +7,7 @@ import java.util.Optional;
 
 public interface CurrencyService {
     List<CurrencyDto> getAllProducts();
-    Optional<CurrencyDto> getOneProducts(Long id);
+    Optional<CurrencyDto> getOneCurrency(Long id);
 
     CurrencyDto addCurrency(CurrencyDto currencyDto);
 }
