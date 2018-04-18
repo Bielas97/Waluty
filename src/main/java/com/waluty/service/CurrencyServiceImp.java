@@ -3,15 +3,18 @@ package com.waluty.service;
 import com.waluty.model.Currency;
 import com.waluty.model.dto.ConverterDto;
 import com.waluty.model.dto.CurrencyDto;
+import com.waluty.repository.CurrencyRepositoryImp;
+import lombok.AllArgsConstructor;
 
 import java.util.stream.Collectors;
 
 import java.util.*;
-
+@AllArgsConstructor
 public class CurrencyServiceImp implements  CurrencyService{
     private Map<String, List<Double>> comparedCurrencies = new LinkedHashMap<>();
     private CurrencyDto currencyDto;
     private ConverterDto converterDto;
+    private CurrencyRepositoryImp currencyRepositoryImp;
     private Map<String, Double> differentMids = new LinkedHashMap<>();
 
     private void setComparedCurrencies() {
@@ -61,7 +64,7 @@ public class CurrencyServiceImp implements  CurrencyService{
     }
     @Override
     List<CurrencyDto> getAllProducts() {
-        return productRepository.findAll()
+        return currencyRepositoryImp.findAll()
                 .stream()
                 .map(converterDto::fromCurrencyToCurrencyDto)
                 .collect(Collectors.toList());
@@ -74,13 +77,13 @@ public class CurrencyServiceImp implements  CurrencyService{
     CurrencyDto addProducer(CurrencyDto currencyDto) {
         return converterDto
                 .fromCurrencyToCurrencyDto(
-                        producerRepository
+                        currencyRepositoryImp
                                 .save(converterDto.fromCurrencyDtoToCurrency(currencyDto))
                 );
     }
     @Override
     List<CurrencyDto> getAllProducers() {
-        return producerRepository.findAll()
+        return currencyRepositoryImp.findAll()
                 .stream()
                 .map(converterDto::fromCurrencyToCurrencyDto)
                 .collect(Collectors.toList());
