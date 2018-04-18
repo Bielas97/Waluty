@@ -9,12 +9,13 @@ import lombok.AllArgsConstructor;
 import java.util.stream.Collectors;
 
 import java.util.*;
+
 @AllArgsConstructor
-public class CurrencyServiceImp implements  CurrencyService{
+public class CurrencyServiceImp implements CurrencyService {
     private Map<String, List<Double>> comparedCurrencies = new LinkedHashMap<>();
     private CurrencyDto currencyDto;
     private ConverterDto converterDto;
-    private CurrencyRepositoryImp currencyRepositoryImp;
+    private CurrencyRepository currencyRepository;
     private Map<String, Double> differentMids = new LinkedHashMap<>();
 
     private void setComparedCurrencies() {
@@ -62,34 +63,32 @@ public class CurrencyServiceImp implements  CurrencyService{
         }
         return true;
     }
+
     @Override
-    List<CurrencyDto> getAllProducts() {
-        return currencyRepositoryImp.findAll()
+    List<Currency> getAllCurrency() {
+        return currencyRepository.findAll()
                 .stream()
-                .map(converterDto::fromCurrencyToCurrencyDto)
+                .map(converterDto::fromCurrencyDtoToCurrency)
                 .collect(Collectors.toList());
     }
+
     @Override
-    Optional<CurrencyDto> getOneProduct(Long id) {
-        return null;
+    Optional<Currency> getOneCurrency(Long id) {
+        return currencyRepository.findById(id).map(p -> converterDto.fromCurrencyDtoToCurrency(p));
     }
+
     @Override
-    CurrencyDto addProducer(CurrencyDto currencyDto) {
-        return converterDto
-                .fromCurrencyToCurrencyDto(
-                        currencyRepositoryImp
-                                .save(converterDto.fromCurrencyDtoToCurrency(currencyDto))
-                );
+    CurrencyDto addCurrencyDto(CurrencyDto currencyDto) {
+        return currencyRepository.save(currencyDto);
     }
+
     @Override
-    List<CurrencyDto> getAllProducers() {
-        return currencyRepositoryImp.findAll()
-                .stream()
-                .map(converterDto::fromCurrencyToCurrencyDto)
-                .collect(Collectors.toList());
+    List<CurrencyDto> getAllCurrencyDto() {
+        return currencyRepository.findAll().collect(Collectors.toList());
     }
+
     @Override
-    Optional<CurrencyDto> getOneProducer(Long id) {
-        return producerRepository.findById(id).map(p -> converterDto.fromCurrencyToCurrencyDto(p));
+    Optional<CurrencyDto> getOneCurrencyDto(Long id) {
+        return currencyRepository.findById(id);
     }
 }
