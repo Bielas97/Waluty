@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import java.util.List;
 
 @Controller
+@requestmapping("/Currency")
 public class CurrencyController{
 
     @GetMapping("/getAll")
