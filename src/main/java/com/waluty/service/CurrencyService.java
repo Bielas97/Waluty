@@ -6,7 +6,7 @@ import java.util.List;
 import java.util.Optional;
 
 public interface CurrencyService {
-    List<CurrencyDto> getAllProducts();
+    List<CurrencyDto> getAllCurrency();
     Optional<CurrencyDto> getOneCurrency(Long id);
 
     CurrencyDto addCurrency(CurrencyDto currencyDto);

@@ -1,7 +1,9 @@
 package com.waluty.model.dto;
 
 import com.waluty.model.Currency;
+import org.springframework.stereotype.Component;
 
+@Component
 public class ConverterDto {
     public CurrencyDto fromCurrencyToCurrencyDto(Currency currency){
         return currency == null ? null :
