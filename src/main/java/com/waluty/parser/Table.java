@@ -1,6 +1,9 @@
 package com.waluty.parser;
 
+import com.waluty.model.Currency;
+import com.waluty.model.dto.ConverterDto;
 import com.waluty.model.dto.CurrencyDto;
+import com.waluty.repository.CurrencyRepository;
 import lombok.Data;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
@@ -17,6 +20,14 @@ import java.util.List;
 @Data
 public class Table {
     static final private String NBP = "http://api.nbp.pl/api/exchangerates/tables/A/";
+
+    private ConverterDto converterDto;
+    private CurrencyRepository currencyRepository;
+
+    public Table(ConverterDto converterDto, CurrencyRepository currencyRepository) {
+        this.converterDto = converterDto;
+        this.currencyRepository = currencyRepository;
+    }
 
     private String datePublication;
 
@@ -69,9 +80,15 @@ public class Table {
     //metoda dodajaca kazda pozycje z listCurrency do bazy danych
     //by metoda poprawnie zapisywala do bazy trzeba skorzystac z metody fromCurrencyDtoToCurrency!!!!!
     //aby tego dokonac ConverterDto musi byc wstrzyknietym beanem!!!!
+    private void saveListCurrencytoDb(){
+        for (CurrencyDto c : listCurrency){
+            currencyRepository.save(converterDto.fromCurrencyDtoToCurrency(c));
+        }
+    }
 
     public Table() {
         this.setTable();
+        saveListCurrencytoDb();
         //wywolanie metody dodajaca kazda pozycje z listCurrency do bazy danych
     }
 }
