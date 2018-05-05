@@ -1,8 +1,6 @@
 package com.waluty.parser;
 
-import com.waluty.model.Currency;
-import com.waluty.model.dto.ConverterDto;
-import com.waluty.model.dto.CurrencyDto;
+import com.waluty.model.dto.*;
 import com.waluty.repository.CurrencyRepository;
 import lombok.Data;
 import org.json.simple.JSONArray;
@@ -39,11 +37,11 @@ public class Table {
             URLConnection connection = url.openConnection();
             BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(connection.getInputStream()));
             org.json.simple.parser.JSONParser jsonParser = new org.json.simple.parser.JSONParser();
-            String napis = "";
+            String string = "";
             listCurrency = new ArrayList<>();
-            while ((napis = bufferedReader.readLine()) != null) {
+            while ((string = bufferedReader.readLine()) != null) {
                 try {
-                    JSONArray tab = (JSONArray) jsonParser.parse(napis);
+                    JSONArray tab = (JSONArray) jsonParser.parse(string);
                     for (Object obiect : tab) {
                         JSONObject jO = (JSONObject) obiect;
                         //System.out.println("XXXXXXXXXXXXXXXXX________________--------------------");
