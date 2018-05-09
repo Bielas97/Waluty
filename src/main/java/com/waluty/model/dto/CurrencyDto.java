@@ -15,6 +15,5 @@ public class CurrencyDto {
     private String effectiveDate; //data publikacji
     private String currency;
     private String code;
-    private String table; //Interesują nas tabele A i B
-    private Double no; //numer tabeli
+    private String tableId; //Interesują nas tabele A i B
 }

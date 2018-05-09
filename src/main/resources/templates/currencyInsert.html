@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Dodaj Walute</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+          integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <link rel="stylesheet" href="/static/css/welcome.css"/>
+</head>
+<body>
+
+
+<div class="container">
+    <div class="row">
+        <div class="col-xl-8 offset-xl-2 col-lg-8 offset-lg-2 col-md-8 offset-md-2 col-sm-8 offset-sm-2">
+            <h2 class="mt-5">Dodaj nową walutę</h2>
+            <form th:action="@{/currency/insert}" method="post" th:object="${currency}">
+                <div class="form-group">
+                    <label class="h3" for="name">Waluta:</label>
+                    <input id="name" class="form-control" type="text" th:field="*{currency}"/>
+                </div>
+                <div class="form-group">
+                    <label class="h3" for="surname">Kod waluty:</label>
+                    <input id="surname" class="form-control" type="text" th:field="*{code}"/>
+                </div>
+                <div class="form-group">
+                    <label class="h3" for="mid">przelicznik:</label>
+                    <input id="mid" class="form-control" type="number" th:field="*{mid}"/>
+                </div>
+                <div class="form-group">
+                    <label class="h3" for="Date">Data opublikowania:</label>
+                    <input id="Date" class="form-control" type="date" th:field="*{effectiveDate}"/>
+                </div>
+                <div>
+                    <input class="btn btn-success" type="submit" value="Wyślij"/>
+                    <input class="btn btn-danger" type="reset" value="Wyzeruj"/>
+                    <a class="btn btn-primary" href="/currency/selectAll">Waluty</a>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+
+
+<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
+        integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
+        crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"
+        integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
+        crossorigin="anonymous"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"
+        integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
+        crossorigin="anonymous"></script>
+</body>
+</html>

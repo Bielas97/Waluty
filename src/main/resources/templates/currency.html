@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Waluty</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+          integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <link rel="stylesheet" href="/static/css/welcome.css"/>
+</head>
+<body>
+
+<div class="row">
+    <div class="col-xl-8 offset-xl-2">
+        <table class="table">
+            <thead>
+            <th>Id</th>
+            <th>Kod</th>
+            <th>Waluta</th>
+            <th>Data opublikowania</th>
+            <th>Przelicznik</th>
+            <th>Id tabeli</th>
+            <th>Opcje</th>
+            </thead>
+            <tbody th:if="${!currencies.isEmpty()}">
+            <tr th:each="c : ${currencies}">
+                <td th:text="${c.id}"></td>
+                <td th:text="${c.code}"></td>
+                <td th:text="${c.currency}"></td>
+                <td th:text="${c.effectiveDate}"></td>
+                <td th:text="${c.mid}"></td>
+                <td th:text="${c.tableId}"></td>
+                <td>
+                    <a class="btn btn-primary mr-2" th:href="@{/currency/update/{id}(id=${c.id})}">MODIFY </a>
+                    <a class="btn btn-danger mr-2" th:href="@{/currency/remove/{id}(id=${c.id})}">REMOVE </a>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+        <a class="btn btn-success" href="/currency/insert">Dodaj</a>
+        <a class="btn btn-primary" href="/">Główna strona</a>
+    </div>
+</div>
+
+
+
+
+
+
+<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
+        integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
+        crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"
+        integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
+        crossorigin="anonymous"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"
+        integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
+        crossorigin="anonymous"></script>
+</body>
+</html>
