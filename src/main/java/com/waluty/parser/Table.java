@@ -2,14 +2,12 @@ package com.waluty.parser;
 
 
 import com.waluty.model.Currency;
-import com.waluty.model.dto.ConverterDto;
-import com.waluty.repository.CurrencyRepository;
-import com.waluty.service.CurrencyService;
+import com.waluty.service.CurrencyServiceImp;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -19,23 +17,25 @@ import java.net.URLConnection;
 import java.util.ArrayList;
 import java.util.List;
 
+@Component
 public class Table {
     private static final String NBP = "http://api.nbp.pl/api/exchangerates/tables/A/";
     private List<Currency> currencyList = new ArrayList<>();
+
 
     public List<Currency> getCurrencyList() {
         return currencyList;
     }
 
-    private CurrencyService currencyService;
-    private ConverterDto converterDto;
-    @Autowired
-    private CurrencyRepository currencyRepository;
+    private final CurrencyServiceImp currencyService;
 
-    @Autowired
-    public Table(CurrencyService currencyService, ConverterDto converterDto) {
+    public Table(CurrencyServiceImp currencyService) {
         this.currencyService = currencyService;
-        this.converterDto = converterDto;
+        try {
+            setTable();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     private void setTable() throws IOException {
@@ -65,6 +65,8 @@ public class Table {
                         currency.setTableId(tableId);
                         currency.setEffectiveDate(effectiveDate);
 
+                        currencyService.addOrUpdateCurrency(currency);
+
                         currencyList.add(currency);
                     }
 
@@ -76,8 +78,5 @@ public class Table {
 
     }
 
-    public Table() throws IOException {
-        setTable();
-    }
 
 }
