@@ -1,0 +1,8 @@
+WIZUALIZACJA KURSÓW WALUT
+
+Projekt jest aplikacją webową wyświetlającą kursy walut. Dane są pobierane z api Narodowego Banku Polskiego http://api.nbp.pl/,
+są one przechowywane i aktualizowane w lokalnej bazie danych. Aplikacja kożysta z lokalnego adresu ip i portu 8080.
+
+Aplikacja jest napisana w języku Java i wykożystuje frameworki Spring i Hibernate.
+
+
