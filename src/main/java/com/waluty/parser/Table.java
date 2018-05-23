@@ -1,11 +1,13 @@
 package com.waluty.parser;
 
-import com.waluty.model.dto.*;
-import com.waluty.repository.CurrencyRepository;
-import lombok.Data;
+
+import com.waluty.model.Currency;
+import com.waluty.service.CurrencyServiceImp;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
+import org.springframework.stereotype.Component;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -15,78 +17,66 @@ import java.net.URLConnection;
 import java.util.ArrayList;
 import java.util.List;
 
-@Data
+@Component
 public class Table {
-    static final private String NBP = "http://api.nbp.pl/api/exchangerates/tables/A/";
+    private static final String NBP = "http://api.nbp.pl/api/exchangerates/tables/A/";
+    private List<Currency> currencyList = new ArrayList<>();
 
-    private ConverterDto converterDto;
-    private CurrencyRepository currencyRepository;
 
-    public Table(ConverterDto converterDto, CurrencyRepository currencyRepository) {
-        this.converterDto = converterDto;
-        this.currencyRepository = currencyRepository;
+    public List<Currency> getCurrencyList() {
+        return currencyList;
     }
 
-    private String datePublication;
+    private final CurrencyServiceImp currencyService;
 
-    private List<CurrencyDto> listCurrency;
-
-    private void setTable() {
+    public Table(CurrencyServiceImp currencyService) {
+        this.currencyService = currencyService;
         try {
-            java.net.URL url = new URL(NBP);
-            URLConnection connection = url.openConnection();
-            BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(connection.getInputStream()));
-            org.json.simple.parser.JSONParser jsonParser = new org.json.simple.parser.JSONParser();
-            String string = "";
-            listCurrency = new ArrayList<>();
-            while ((string = bufferedReader.readLine()) != null) {
-                try {
-                    JSONArray tab = (JSONArray) jsonParser.parse(string);
-                    for (Object obiect : tab) {
-                        JSONObject jO = (JSONObject) obiect;
-                        //System.out.println("XXXXXXXXXXXXXXXXX________________--------------------");
-                        // System.out.println(jO.toString());
-
-                        JSONArray table = (JSONArray) jO.get("rates");
-                        if (datePublication == null) {
-                            datePublication = (String) jO.get("effectiveDate");
-                        }
-                        for (Object obiect2 : table) {
-                            JSONObject job = (JSONObject) obiect2;
-                            CurrencyDto currency = new CurrencyDto();
-
-                            currency.setCode((String) job.get("code"));
-                            currency.setMid((Double) job.get("mid"));
-                            currency.setCurrency((String) job.get("currency"));
-                            //niepotrzene!!!!
-                       /*     //nie jestem pewien moze byc do poprawy ale idzie do mastera
-                            currency.setTable((String) job.get("table"));
-                            currency.setNo((Double) job.get("no"));
-                            //koniec fragmentu ktorego nie jestem pewien*/
-                            listCurrency.add(currency);
-                        }
-                    }
-                } catch (ParseException e) {
-                    e.printStackTrace();
-                }
-            }
+            setTable();
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
 
-    //metoda dodajaca kazda pozycje z listCurrency do bazy danych
-    //by metoda poprawnie zapisywala do bazy trzeba skorzystac z metody fromCurrencyDtoToCurrency!!!!!
-    //aby tego dokonac ConverterDto musi byc wstrzyknietym beanem!!!!
-    private void saveListCurrencytoDb(){
-        for (CurrencyDto c : listCurrency){
-            currencyRepository.save(converterDto.fromCurrencyDtoToCurrency(c));
+    private void setTable() throws IOException {
+
+        java.net.URL url = new URL(NBP);
+        URLConnection urlConnection = url.openConnection();
+        BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(urlConnection.getInputStream()));
+        String s = "";
+        JSONParser jsonParser = new JSONParser();
+        while ((s = bufferedReader.readLine()) != null) {
+            try {
+                JSONArray jsonArray = (JSONArray) jsonParser.parse(s);
+                for (Object ob : jsonArray) {
+                    JSONObject jObject = (JSONObject) ob;
+                    String effectiveDate = (String) jObject.get("effectiveDate");
+                    String tableId = (String) jObject.get("table");
+                    JSONArray table = (JSONArray) jObject.get("rates");
+                    for (Object ob2 : table) {
+
+                        Currency currency = new Currency();
+
+                        JSONObject job = (JSONObject) ob2;
+
+                        currency.setCode((String) job.get("code"));
+                        currency.setMid((Double) job.get("mid"));
+                        currency.setCurrency((String) job.get("currency"));
+                        currency.setTableId(tableId);
+                        currency.setEffectiveDate(effectiveDate);
+
+                        currencyService.addOrUpdateCurrency(currency);
+
+                        currencyList.add(currency);
+                    }
+
+                }
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
         }
+
     }
 
-    public Table() {
-        this.setTable();
-        saveListCurrencytoDb();
-        //wywolanie metody dodajaca kazda pozycje z listCurrency do bazy danych
-    }
+
 }

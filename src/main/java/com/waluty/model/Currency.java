@@ -9,20 +9,19 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 
-@Entity
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
+@Entity
 public class Currency {
-    @GeneratedValue
     @Id
+    @GeneratedValue
     private Long id;
     private Double mid; // średni kurs waluty
     private String effectiveDate; //data publikacji
     private String currency;
     private String code;
-    private String table; //Interesują nas tabele A i B
-    private Double no; //numer tabeli
+    private String tableId; //Interesują nas tabele A i B
 
 }
