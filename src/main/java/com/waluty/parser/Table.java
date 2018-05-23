@@ -38,11 +38,19 @@ public class Table {
         }
     }
 
-    private void setTable() throws IOException {
+    public Currency setUPCurrency(String code, Double mid, String currencyName, String tableId, String effectiveDate) {
+        Currency currency = new Currency();
 
-        java.net.URL url = new URL(NBP);
-        URLConnection urlConnection = url.openConnection();
-        BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(urlConnection.getInputStream()));
+        currency.setCode(code);
+        currency.setMid(mid);
+        currency.setCurrency(currencyName);
+        currency.setTableId(tableId);
+        currency.setEffectiveDate(effectiveDate);
+
+        return currency;
+    }
+
+    private void parseJSON(BufferedReader bufferedReader) throws IOException {
         String s = "";
         JSONParser jsonParser = new JSONParser();
         while ((s = bufferedReader.readLine()) != null) {
@@ -55,15 +63,9 @@ public class Table {
                     JSONArray table = (JSONArray) jObject.get("rates");
                     for (Object ob2 : table) {
 
-                        Currency currency = new Currency();
-
                         JSONObject job = (JSONObject) ob2;
 
-                        currency.setCode((String) job.get("code"));
-                        currency.setMid((Double) job.get("mid"));
-                        currency.setCurrency((String) job.get("currency"));
-                        currency.setTableId(tableId);
-                        currency.setEffectiveDate(effectiveDate);
+                        Currency currency = setUPCurrency((String) job.get("code"), (Double) job.get("mid"), (String) job.get("currency"), tableId, effectiveDate);
 
                         currencyService.addOrUpdateCurrency(currency);
 
@@ -75,6 +77,14 @@ public class Table {
                 e.printStackTrace();
             }
         }
+    }
+
+    private void setTable() throws IOException {
+
+        java.net.URL url = new URL(NBP);
+        URLConnection urlConnection = url.openConnection();
+        BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(urlConnection.getInputStream()));
+        parseJSON(bufferedReader);
 
     }
 
