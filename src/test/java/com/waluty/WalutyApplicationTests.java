@@ -36,7 +36,7 @@ public class WalutyApplicationTests {
 
     @Test
     public void testGetCurrency() {
-        String testMessage = "getAll";
+        String testMessage = "currency";
         assertEquals(testMessage, control.getCurrency(model));
     }
 
