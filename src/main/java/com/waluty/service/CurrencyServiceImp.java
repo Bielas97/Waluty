@@ -13,6 +13,9 @@ import java.util.stream.Collectors;
 @Service
 public class CurrencyServiceImp implements CurrencyService {
     private Map<String, List<Double>> comparedCurrencies = new LinkedHashMap<>();
+
+    private CurrencyDto currencyDto;
+
     private ConverterDto converterDto;
     private CurrencyRepository currencyRepository;
     private Map<String, Double> differentMids = new LinkedHashMap<>();
@@ -23,13 +26,13 @@ public class CurrencyServiceImp implements CurrencyService {
         this.currencyRepository = currencyRepository;
     }
 
-    private void setComparedCurrencies() {
+   /* private void setComparedCurrencies() {
         List<CurrencyDto> temp = new LinkedList<>();
-        List<Currency> pom = currencyRepository.findAll();
+        List<Currency> pom = currencyRepository.getAll();
 
         for (Currency x : pom)
             temp.add(converterDto.fromCurrencyToCurrencyDto(x));
-    }
+    }*/
 
     public void setDifferentMids() {
         for (Map.Entry<String, List<Double>> entry : comparedCurrencies.entrySet()) {
@@ -45,7 +48,8 @@ public class CurrencyServiceImp implements CurrencyService {
     }
 
     @Override
-    public List<CurrencyDto> getAllCurrency() {
+    public List<CurrencyDto> getAllProducts() {
+
         return currencyRepository.findAll()
                 .stream()
                 .map(converterDto::fromCurrencyToCurrencyDto)
@@ -58,11 +62,32 @@ public class CurrencyServiceImp implements CurrencyService {
     }
 
     @Override
-    public CurrencyDto addCurrency(CurrencyDto currencyDto) {
+    public CurrencyDto removeCurrency(Long id) {
+        if(id != null){
+            CurrencyDto categoryDto = converterDto
+                    .fromCurrencyToCurrencyDto(currencyRepository.findById(id)
+                            .orElseThrow(NullPointerException::new));
+            currencyRepository.deleteById(id);
+            return categoryDto;
+        }
+        return null;
+    }
+
+
+    @Override
+    public CurrencyDto addOrUpdateCurrency(CurrencyDto currencyDto) {
+
         return converterDto
                 .fromCurrencyToCurrencyDto(
                         currencyRepository
                                 .save(converterDto.fromCurrencyDtoToCurrency(currencyDto))
                 );
     }
+
+    @Override
+    public Currency addOrUpdateCurrency(Currency currency) {
+        return currencyRepository.save(currency);
+    }
+
+
 }
