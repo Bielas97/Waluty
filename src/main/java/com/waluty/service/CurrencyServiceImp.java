@@ -13,7 +13,9 @@ import java.util.stream.Collectors;
 @Service
 public class CurrencyServiceImp implements CurrencyService {
     private Map<String, List<Double>> comparedCurrencies = new LinkedHashMap<>();
+
     private CurrencyDto currencyDto;
+
     private ConverterDto converterDto;
     private CurrencyRepository currencyRepository;
     private Map<String, Double> differentMids = new LinkedHashMap<>();
@@ -47,6 +49,7 @@ public class CurrencyServiceImp implements CurrencyService {
 
     @Override
     public List<CurrencyDto> getAllProducts() {
+
         return currencyRepository.findAll()
                 .stream()
                 .map(converterDto::fromCurrencyToCurrencyDto)
@@ -73,6 +76,7 @@ public class CurrencyServiceImp implements CurrencyService {
 
     @Override
     public CurrencyDto addOrUpdateCurrency(CurrencyDto currencyDto) {
+
         return converterDto
                 .fromCurrencyToCurrencyDto(
                         currencyRepository
@@ -84,5 +88,6 @@ public class CurrencyServiceImp implements CurrencyService {
     public Currency addOrUpdateCurrency(Currency currency) {
         return currencyRepository.save(currency);
     }
+
 
 }
